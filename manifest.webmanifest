@@ -1,10 +1,10 @@
 {
-  "name": "Warehouse Pro Staff",
-  "short_name": "Warehouse Pro",
-  "start_url": "./Warehouse_Pro_Staff_FINAL.html",
-  "display": "standalone",
-  "background_color": "#111827",
-  "theme_color": "#111827",
-  "description": "Warehouse Pro staff inventory app",
-  "icons": []
+  "name":"Warehouse Pro Staff",
+  "short_name":"Warehouse Pro",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#f5f7fb",
+  "theme_color":"#102b4d",
+  "description":"Warehouse Pro staff inventory app",
+  "icons":[]
 }

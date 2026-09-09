@@ -29,18 +29,11 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
 .table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:11px;border-bottom:1px solid #e5eaf1;text-align:left;font-size:13px}
 .badge{display:inline-block;padding:4px 8px;border-radius:12px;font-size:12px;background:#e7f0ff;color:#1454a3}.badge.low{background:#fff4d6;color:#8a5a00}.badge.out{background:#ffe7e7;color:#b42318}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}.actions{display:flex;gap:8px;flex-wrap:wrap}
-.smallbtn{width:auto!important;padding:8px 12px!important;margin:0!important}.search{max-width:360px}.empty{text-align:center;padding:30px;color:#64748b}
+.smallbtn{width:auto!important;padding:8px 12px!important;margin:0!important}.search{max-width:360px}.empty{text-align:center;padding:30px;color:#64748b}.mobile-nav{display:none}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.side{display:none}.main{margin-left:0;padding:18px}.grid,.form-grid{grid-template-columns:1fr}.top{gap:10px;align-items:flex-start}.search{max-width:none}}
+@media(max-width:700px){.side{display:none}.main{margin-left:0;padding:18px;padding-bottom:132px}.grid,.form-grid{grid-template-columns:1fr}.top{gap:10px;align-items:flex-start}.search{max-width:none}.mobile-nav{display:flex !important;position:fixed;z-index:9999;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));min-height:82px;background:#102b4d;border-radius:20px;padding:8px;box-shadow:0 12px 32px rgba(15,23,42,.28);justify-content:space-around;gap:6px}.mobile-nav button{flex:1;min-width:0;min-height:66px;border:0;background:transparent;color:#fff;padding:8px 2px;border-radius:15px;font-size:28px;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.mobile-nav button span{display:block;font-size:12px;font-weight:700;line-height:1.15;margin-top:7px;color:#dce8f6;white-space:nowrap}.mobile-nav button.active{background:#1c67d8;box-shadow:0 4px 12px rgba(0,0,0,.18)}.mobile-nav button:active{transform:scale(.97)} }
  .stat b{font-size:22px}
 </style>
-
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#111827">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Warehouse Pro">
 </head>
 <body>
 
@@ -91,6 +84,13 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
  </aside>
  <main class="main">
   <div class="top"><div><h1 id="pageTitle">Dashboard</h1><p id="welcome"></p></div><span id="role" class="role"></span></div>
+  <nav class="mobile-nav" aria-label="Staff navigation">
+   <button data-page="dashboard">🏠<span>Dashboard</span></button>
+   <button data-page="products">📦<span>Products</span></button>
+   <button data-page="sales">📤<span>Sales</span></button>
+   <button data-page="alerts">🔔<span>Alerts</span></button>
+   <button id="mobileLogout">↪<span>Sign out</span></button>
+  </nav>
   <section id="page-dashboard" class="content-page active">
    <div class="grid">
     <div class="stat"><span class="muted">Total products</span><b id="statProducts">0</b></div>
@@ -104,7 +104,7 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
    <div class="panel">
     <div style="padding:12px 14px;border-radius:10px;background:#eef6ff;margin-bottom:14px"><b>👤 Staff mode:</b> Use <b>−</b> to record sold quantities. The <b>＋</b> stock-receiving control is Admin-only.</div>
     <div class="top" style="align-items:center;gap:12px"><div><h2 style="margin:0">Products</h2><p class="muted">Manage your warehouse product master.</p></div>
-    <button class="btn smallbtn" id="addProductBtn">＋ Add Product</button></div>
+    <button class="btn smallbtn" id="addProductBtn" style="display:none">＋ Add Product</button></div>
     <div class="field"><input id="productSearch" class="search" placeholder="Search by product name, SKU or category"></div>
     <div id="productMsg" class="msg"></div>
     <div class="table-wrap"><table class="table"><thead><tr>
@@ -360,7 +360,9 @@ window.quickAdd=async id=>{
 $("addProductBtn").onclick=()=>openProduct();$("closeProductBtn").onclick=closeProduct;$("cancelProductBtn").onclick=closeProduct;$("productSearch").oninput=renderProducts;
 $("productForm").onsubmit=async e=>{e.preventDefault();let sku=$("sku").value.trim(),name=$("productName").value.trim();if(!sku||!name)return pfmsg("SKU and Product Name are required.");let payload={sku,product_name:name,category:$("category").value.trim()||null,purchase_price:Number($("purchasePrice").value||0),selling_price:Number($("sellingPrice").value||0),current_stock:Math.max(0,Math.floor(Number($("currentStock").value||0))),reorder_level:Math.max(0,Math.floor(Number($("reorderLevel").value||0)))};if(!editingProductId)payload.created_by=(await sb.auth.getUser()).data.user?.id;pfmsg("Saving...",true);let r=editingProductId?await sb.from("products").update(payload).eq("id",editingProductId):await sb.from("products").insert(payload);if(r.error)return pfmsg(r.error.message);closeProduct();pmsg(editingProductId?"Product updated.":"Product added.",true);loadProducts()}
 function showPage(page){document.querySelectorAll(".content-page").forEach(x=>x.classList.remove("active"));$("page-"+page).classList.add("active");$("pageTitle").textContent=page.charAt(0).toUpperCase()+page.slice(1);if(page==="products")loadProducts();if(page==="purchase"){loadProducts();loadPurchases()}if(page==="sales"){loadProducts();loadSales()}}
-document.querySelectorAll(".side button[data-page]").forEach(b=>b.onclick=()=>showPage(b.dataset.page))
+document.querySelectorAll(".side button[data-page], .mobile-nav button[data-page]").forEach(b=>b.onclick=()=>{showPage(b.dataset.page);document.querySelectorAll(".mobile-nav button[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===b.dataset.page))})
+$("mobileLogout").onclick=()=>$("logout").click();
+$("addProductBtn").style.display=currentRole==="admin"?"block":"none";
 
 let purchases=[];
 function purchaseMsg(t,ok=false){$("purchaseMsg").textContent=t;$("purchaseMsg").style.color=ok?"#16815b":"#b42318"}
@@ -423,9 +425,10 @@ loadSales=async function(){await oldLoadSales();await refreshAnalytics()};
 
 boot();
 </script>
-
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}</script>
 </body>
+<style>
+@media(max-width:700px){body{padding-bottom:0}.mobile-nav{display:flex!important;visibility:visible!important;opacity:1!important}.mobile-nav button{display:flex!important;flex-direction:column;align-items:center;justify-content:center}}
+</style>
 </html>
 <style>
   /* Staff app: receiving/add-stock controls are intentionally hidden. */

@@ -1,0 +1,9 @@
+{
+  "name": "Warehouse Pro Admin",
+  "short_name": "Warehouse Pro",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111827",
+  "description": "Warehouse Pro Admin app"
+}

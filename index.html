@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Warehouse Pro — Staff</title>
+<title>Warehouse Pro — Admin</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
@@ -29,18 +29,39 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
 .table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{padding:11px;border-bottom:1px solid #e5eaf1;text-align:left;font-size:13px}
 .badge{display:inline-block;padding:4px 8px;border-radius:12px;font-size:12px;background:#e7f0ff;color:#1454a3}.badge.low{background:#fff4d6;color:#8a5a00}.badge.out{background:#ffe7e7;color:#b42318}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.form-grid .full{grid-column:1/-1}.actions{display:flex;gap:8px;flex-wrap:wrap}
-.smallbtn{width:auto!important;padding:8px 12px!important;margin:0!important}.search{max-width:360px}.empty{text-align:center;padding:30px;color:#64748b}.mobile-nav{display:none}
+.smallbtn{width:auto!important;padding:8px 12px!important;margin:0!important}.search{max-width:360px}.empty{text-align:center;padding:30px;color:#64748b}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.side{display:none}.main{margin-left:0;padding:18px;padding-bottom:132px}.grid,.form-grid{grid-template-columns:1fr}.top{gap:10px;align-items:flex-start}.search{max-width:none}.mobile-nav{display:flex !important;position:fixed;z-index:9999;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));min-height:82px;background:#102b4d;border-radius:20px;padding:8px;box-shadow:0 12px 32px rgba(15,23,42,.28);justify-content:space-around;gap:6px}.mobile-nav button{flex:1;min-width:0;min-height:66px;border:0;background:transparent;color:#fff;padding:8px 2px;border-radius:15px;font-size:28px;line-height:1;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.mobile-nav button span{display:block;font-size:12px;font-weight:700;line-height:1.15;margin-top:7px;color:#dce8f6;white-space:nowrap}.mobile-nav button.active{background:#1c67d8;box-shadow:0 4px 12px rgba(0,0,0,.18)}.mobile-nav button:active{transform:scale(.97)} }
+@media(max-width:700px){.side{display:none}.main{margin-left:0;padding:18px}.grid,.form-grid{grid-template-columns:1fr}.top{gap:10px;align-items:flex-start}.search{max-width:none}}
  .stat b{font-size:22px}
 </style>
+
+/* Warehouse Pro Admin mobile navigation */
+.mobile-nav{display:none}
+.notes-list{display:grid;gap:10px;margin-top:16px}.note-item{border:1px solid #e5eaf1;border-radius:12px;padding:14px;background:#fbfdff}.note-meta{font-size:12px;color:#64748b;margin-bottom:7px}.note-text{white-space:pre-wrap;line-height:1.5;word-break:break-word}.note-textarea{min-height:140px;resize:vertical}
+@media(max-width:700px){
+  .side{display:none!important}
+  .main{margin-left:0!important;padding:18px 14px 205px!important;width:100%!important;box-sizing:border-box}
+  .mobile-nav{display:grid!important;grid-template-columns:repeat(5,1fr);gap:5px;position:fixed;left:6px;right:6px;bottom:6px;z-index:99999;background:#102b4d;border-radius:20px;padding:7px;box-shadow:0 10px 30px rgba(0,0,0,.22);box-sizing:border-box;grid-auto-rows:minmax(56px,1fr)}
+  .mobile-nav button{min-height:62px!important;border:0!important;background:transparent!important;color:#fff!important;padding:7px 2px!important;border-radius:12px!important;font-size:24px!important;line-height:1!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;cursor:pointer}
+  .mobile-nav button span{display:block!important;font-size:11px!important;font-weight:700!important;margin-top:5px!important;color:#dce8f6!important;white-space:nowrap}
+  .mobile-nav button:active{transform:scale(.96)}
+  .mobile-nav button.active{background:#1c67d8!important}
+  .top{gap:10px!important;align-items:flex-start!important}
+  .grid,.form-grid{grid-template-columns:1fr!important}
+  .search{max-width:none!important;width:100%!important;box-sizing:border-box}
+}
+@media(max-width:380px){
+  .mobile-nav button{min-height:54px!important;font-size:19px!important}
+  .mobile-nav button span{font-size:10px!important}
+}
+
 </head>
 <body>
 
 <div id="setup" class="wrap">
  <div class="card">
-  <h1>👤 Warehouse Pro Staff</h1>
-  <p>Connect your online inventory system</p>
+  <h1>🛠️ Warehouse Pro Admin</h1>
+  <p>Administrator control panel</p>
 
   <div class="panel" style="margin-top:15px">
    <b>Supabase project URL</b>
@@ -54,7 +75,7 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
     <label>Publishable key</label>
     <input id="keyInput" type="password" placeholder="sb_publishable_...">
    </div>
-   <button class="btn" id="connectBtn">Save & Connect</button>
+   <button class="btn" id="connectBtn">Save & Connect Admin</button>
    <div id="setupMsg" class="msg"></div>
   </div>
  </div>
@@ -62,7 +83,7 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
 
 <div id="auth" class="wrap" style="display:none">
  <div class="card">
-  <h1>📦 Warehouse Pro</h1><p>Secure online inventory access</p>
+  <h1>🛠️ Warehouse Pro Admin</h1><p>Administrator-only access</p>
   <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"></div>
   <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••"></div>
   <button class="btn" id="loginBtn">Sign in</button>
@@ -75,22 +96,33 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
 
 <div id="app" class="app">
  <aside class="side">
-  <h2>👤 Warehouse Pro Staff</h2>
-  <button data-page="dashboard">🏠 Dashboard</button>
+  <h2>🛠️ Warehouse Pro Admin</h2>
+  <button data-page="dashboard">🏠 Admin Dashboard</button>
   <button data-page="products">📦 Products & Stock</button>
+  <button data-page="purchase">📥 Purchases</button>
   <button data-page="sales">📤 Daily Sales</button>
+  <button data-page="reports">📈 Reports</button>
   <button data-page="alerts">🔔 Stock Alerts</button>
+  <button data-page="damages">⚠️ Damages</button>
+  <button data-page="remarks">📝 Remarks</button>
+  <button data-page="settings">⚙️ Admin Settings</button>
   <button id="logout" style="margin-top:25px">↪ Sign out</button>
  </aside>
  <main class="main">
-  <div class="top"><div><h1 id="pageTitle">Dashboard</h1><p id="welcome"></p></div><span id="role" class="role"></span></div>
-  <nav class="mobile-nav" aria-label="Staff navigation">
+  <div class="top"><div><h1 id="pageTitle">Admin Dashboard</h1><p id="welcome"></p></div><div id="adminRoleNotice" style="padding:8px 12px;border-radius:8px;background:#eef6ff;font-size:13px">Role: <b id="roleText">loading...</b></div><span id="role" class="role"></span></div>
+  <nav class="mobile-nav" aria-label="Admin navigation">
    <button data-page="dashboard">🏠<span>Dashboard</span></button>
    <button data-page="products">📦<span>Products</span></button>
+   <button data-page="purchase">📥<span>Purchases</span></button>
    <button data-page="sales">📤<span>Sales</span></button>
+   <button data-page="reports">📈<span>Reports</span></button>
    <button data-page="alerts">🔔<span>Alerts</span></button>
+   <button data-page="damages">⚠️<span>Damages</span></button>
+   <button data-page="remarks">📝<span>Remarks</span></button>
+   <button data-page="settings">⚙️<span>Settings</span></button>
    <button id="mobileLogout">↪<span>Sign out</span></button>
   </nav>
+
   <section id="page-dashboard" class="content-page active">
    <div class="grid">
     <div class="stat"><span class="muted">Total products</span><b id="statProducts">0</b></div>
@@ -98,17 +130,17 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
     <div class="stat"><span class="muted">Low stock</span><b id="statLow">0</b></div>
     <div class="stat"><span class="muted">Out of stock</span><b id="statOut">0</b></div>
    </div>
-   <div class="panel"><h3>Warehouse Pro</h3><p>Products are connected to your Supabase database. Use Products to add and manage inventory.</p></div>
+   <div class="panel"><h3>Admin Control Center</h3><p>Admin can add stock, record purchases, manage products, review daily sales, reports and low-stock alerts.</p></div>
   </section>
   <section id="page-products" class="content-page">
    <div class="panel">
-    <div style="padding:12px 14px;border-radius:10px;background:#eef6ff;margin-bottom:14px"><b>👤 Staff mode:</b> Use <b>−</b> to record sold quantities. The <b>＋</b> stock-receiving control is Admin-only.</div>
+    <div style="padding:12px 14px;border-radius:10px;background:#eef6ff;margin-bottom:14px"><b>🔐 Admin mode:</b> You have permission to add stock with <b>＋</b> and reduce stock with <b>−</b>.</div>
     <div class="top" style="align-items:center;gap:12px"><div><h2 style="margin:0">Products</h2><p class="muted">Manage your warehouse product master.</p></div>
-    <button class="btn smallbtn" id="addProductBtn" style="display:none">＋ Add Product</button></div>
+    <button class="btn smallbtn" id="addProductBtn">＋ Add Product</button></div>
     <div class="field"><input id="productSearch" class="search" placeholder="Search by product name, SKU or category"></div>
     <div id="productMsg" class="msg"></div>
     <div class="table-wrap"><table class="table"><thead><tr>
-    <th>SKU</th><th>Product</th><th>Category</th><th>Purchase</th><th>Selling</th><th>Stock</th><th>Reorder</th><th>Status</th>
+    <th>SKU</th><th>Product</th><th>Category</th><th>Purchase</th><th>Selling</th><th>Stock</th><th>Reorder</th><th>Status</th><th>Actions</th>
     </tr></thead><tbody id="productsBody"><tr><td colspan="9" class="empty">Loading products...</td></tr></tbody></table></div>
    </div>
   </section>
@@ -131,9 +163,26 @@ button{font-family:inherit}.content-page{display:none}.content-page.active{displ
     <div class="panel"><h3 style="margin-top:0">Sales Entries</h3><div class="table-wrap"><table class="table"><thead><tr><th>Sale No.</th><th>Date</th><th>Product</th><th>Customer</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody id="salesBody"><tr><td colspan="7" class="empty">Loading sales...</td></tr></tbody></table></div></div>
    </div>
   </section>
-  <section id="page-stock" class="content-page"><div class="panel"><h2>📊 Stock Movements</h2><p class="muted">Complete history of stock coming in and going out.</p><div class="table-wrap"><table class="table"><thead><tr><th>Date</th><th>Type</th><th>Reference</th><th>Product</th><th>Qty</th><th>Stock After</th><th>Note</th></tr></thead><tbody id="movementsBody"><tr><td colspan="7" class="empty">Loading movements...</td></tr></tbody></table></div></div></section>
   <section id="page-reports" class="content-page"><div class="grid"><div class="stat"><span class="muted">Sales value</span><b id="reportSales">₹0</b></div><div class="stat"><span class="muted">Purchase value</span><b id="reportPurchases">₹0</b></div><div class="stat"><span class="muted">Units sold</span><b id="reportUnits">0</b></div><div class="stat"><span class="muted">Stock value</span><b id="reportStockValue">₹0</b></div></div><div class="panel"><h2>🏆 Best Sellers</h2><div class="table-wrap"><table class="table"><thead><tr><th>Product</th><th>Units Sold</th><th>Sales Value</th></tr></thead><tbody id="bestSellersBody"><tr><td colspan="3" class="empty">Loading report...</td></tr></tbody></table></div></div><div class="panel"><h2>🐢 Slow / Non-Selling Products</h2><div class="table-wrap"><table class="table"><thead><tr><th>Product</th><th>Current Stock</th><th>Units Sold</th><th>Status</th></tr></thead><tbody id="slowProductsBody"><tr><td colspan="4" class="empty">Loading report...</td></tr></tbody></table></div></div></section>
   <section id="page-alerts" class="content-page"><div class="panel"><h2>🔔 Stock Alerts</h2><p class="muted">Products at or below their reorder level.</p><div class="table-wrap"><table class="table"><thead><tr><th>SKU</th><th>Product</th><th>Stock</th><th>Reorder Level</th><th>Status</th></tr></thead><tbody id="alertsBody"><tr><td colspan="5" class="empty">Loading alerts...</td></tr></tbody></table></div></div></section>
+  <section id="page-damages" class="content-page">
+   <div class="panel">
+    <div class="top" style="align-items:center;gap:12px"><div><h2 style="margin:0">⚠️ Damages</h2><p class="muted">Write any damage details, reason, product issue or other damage note. It will be saved here.</p></div></div>
+    <div class="field"><label>Damage note</label><textarea id="damageText" class="note-textarea" placeholder="Write damage details here..."></textarea></div>
+    <button class="btn smallbtn" id="saveDamageBtn">💾 Save Damage</button>
+    <div id="damageMsg" class="msg"></div>
+    <div class="notes-list" id="damagesList"><div class="empty">Loading damages...</div></div>
+   </div>
+  </section>
+  <section id="page-remarks" class="content-page">
+   <div class="panel">
+    <div class="top" style="align-items:center;gap:12px"><div><h2 style="margin:0">📝 Remarks</h2><p class="muted">Write any general remark, instruction, observation or note. It will be saved here.</p></div></div>
+    <div class="field"><label>Remark</label><textarea id="remarkText" class="note-textarea" placeholder="Write your remark here..."></textarea></div>
+    <button class="btn smallbtn" id="saveRemarkBtn">💾 Save Remark</button>
+    <div id="remarkMsg" class="msg"></div>
+    <div class="notes-list" id="remarksList"><div class="empty">Loading remarks...</div></div>
+   </div>
+  </section>
   <section id="page-settings" class="content-page"><div class="panel"><h2>⚙️ Settings</h2><div class="form-grid"><div><label>Signed-in Email</label><input id="settingsEmail" readonly></div><div><label>Role</label><input id="settingsRole" readonly></div><div><label>Supabase Project</label><input value="Super Sixes Sports Arena" readonly></div><div><label>System</label><input value="Warehouse Pro" readonly></div></div><p class="muted" style="margin-top:16px">User roles are controlled from the database. Do not change roles from the browser.</p></div></section>
  </main>
 </div>
@@ -230,7 +279,7 @@ async function loadProfile(user){
   $("role").textContent="Staff";
   return;
  }
- currentRole=String(data.role||"staff").toLowerCase().trim();
+ currentRole=String((data&&data.role)||"staff").toLowerCase().trim();
  $("welcome").textContent=`Welcome, ${data.full_name||user.email}`;
  $("role").textContent=currentRole;
  if(typeof renderProducts==="function") renderProducts();
@@ -325,44 +374,60 @@ function pmsg(t,ok=false){$("productMsg").textContent=t;$("productMsg").style.co
 function pfmsg(t,ok=false){$("productFormMsg").textContent=t;$("productFormMsg").style.color=ok?"#16815b":"#b42318"}
 function status(p){let s=Number(p.current_stock||0),r=Number(p.reorder_level||0);return s<=0?["Out of stock","out"]:(r>0&&s<=r?["Low stock","low"]:["In stock",""])}
 function stats(){let total=products.reduce((a,p)=>a+Number(p.current_stock||0),0),low=products.filter(p=>status(p)[1]=="low").length,out=products.filter(p=>status(p)[1]=="out").length;$("statProducts").textContent=products.length;$("statStock").textContent=total;$("statLow").textContent=low;$("statOut").textContent=out}
-function renderProducts(){let q=($("productSearch").value||"").toLowerCase();let rows=products.filter(p=>[p.sku,p.product_name,p.category].some(v=>String(v||"").toLowerCase().includes(q)));$("productsBody").innerHTML=rows.length?rows.map(p=>{let [st,cl]=status(p);return `<tr><td>${esc(p.sku)}</td><td>${esc(p.product_name)}</td><td>${esc(p.category||"—")}</td><td>₹${Number(p.purchase_price||0).toFixed(2)}</td><td>₹${Number(p.selling_price||0).toFixed(2)}</td><td><div style="display:flex;align-items:center;gap:6px"><button class="btn secondary smallbtn" onclick="quickSell('${p.id}')" title="Sell / reduce stock">−</button><b>${Number(p.current_stock||0)}</b>${currentRole==="admin"?`<button class="btn secondary smallbtn" onclick="quickAdd('${p.id}')" title="Add stock">＋</button>`:""}</div></td><td>${Number(p.reorder_level||0)}</td><td><span class="badge ${cl}">${st}</span></td><td><div class="actions"><button class="btn secondary smallbtn" onclick="removeProduct('${p.id}')">Delete</button></div></td></tr>`}).join(""):`<tr><td colspan="9" class="empty">No products found.</td></tr>`;stats()}
+function renderProducts(){let q=($("productSearch").value||"").toLowerCase();let rows=products.filter(p=>[p.sku,p.product_name,p.category].some(v=>String(v||"").toLowerCase().includes(q)));$("productsBody").innerHTML=rows.length?rows.map(p=>{let [st,cl]=status(p);return `<tr><td>${esc(p.sku)}</td><td>${esc(p.product_name)}</td><td>${esc(p.category||"—")}</td><td>₹${Number(p.purchase_price||0).toFixed(2)}</td><td>₹${Number(p.selling_price||0).toFixed(2)}</td><td><div style="display:flex;align-items:center;gap:6px"><button class="btn secondary smallbtn" onclick="quickSell('${p.id}')" title="Sell / reduce stock">−</button><b>${Number(p.current_stock||0)}</b>${currentRole==="admin"?`<button class="btn secondary smallbtn" onclick="quickAdd('${p.id}')" title="Add stock">＋</button>`:""}</div></td><td>${Number(p.reorder_level||0)}</td><td><span class="badge ${cl}">${st}</span></td><td><div class="actions"><button class="btn secondary smallbtn" onclick="editProduct('${p.id}')">Edit</button><button class="btn secondary smallbtn" onclick="removeProduct('${p.id}')">Delete</button></div></td></tr>`}).join(""):`<tr><td colspan="9" class="empty">No products found.</td></tr>`;stats()}
 async function loadProducts(){if(!sb)return;$("productsBody").innerHTML=`<tr><td colspan="9" class="empty">Loading products...</td></tr>`;let {data,error}=await sb.from("products").select("id,sku,product_name,category,purchase_price,selling_price,current_stock,reorder_level,created_by,created_at").order("created_at",{ascending:false});if(error){$("productsBody").innerHTML=`<tr><td colspan="9" class="empty">Could not load products: ${esc(error.message)}</td></tr>`;pmsg(error.message);return}products=data||[];pmsg("");renderProducts()}
 function openProduct(p=null){editingProductId=p?.id||null;$("modalTitle").textContent=p?"Edit Product":"Add Product";$("productId").value=p?.id||"";$("sku").value=p?.sku||"";$("productName").value=p?.product_name||"";$("category").value=p?.category||"";$("purchasePrice").value=p?.purchase_price??0;$("sellingPrice").value=p?.selling_price??0;$("currentStock").value=p?.current_stock??0;$("reorderLevel").value=p?.reorder_level??0;$("productFormMsg").textContent="";$("productModal").style.display="block"}
 function closeProduct(){$("productModal").style.display="none";editingProductId=null}
 window.editProduct=id=>{let p=products.find(x=>x.id===id);if(p)openProduct(p)}
 window.removeProduct=async id=>{let p=products.find(x=>x.id===id);if(!p||!confirm(`Delete "${p.product_name}"?`))return;let {error}=await sb.from("products").delete().eq("id",id);if(error)return pmsg(error.message);pmsg("Product deleted.",true);loadProducts()}
 window.quickSell=async id=>{
- let p=products.find(x=>x.id===id);
- if(!p)return;
- let answer=prompt(`How many ${p.product_name} sold?`,'1');
- if(answer===null)return;
- let qty=Math.floor(Number(answer));
- if(!Number.isFinite(qty)||qty<1)return alert('Enter a valid quantity.');
+ let p=products.find(x=>x.id===id); if(!p)return;
+ let qty=Math.floor(Number(prompt(`How many ${p.product_name} sold?`, "1")||0));
+ if(qty<1)return;
  let current=Number(p.current_stock||0);
- if(qty>current)return alert(`Only ${current} unit(s) available.`);
+ if(qty>current)return alert(`Only ${current} unit(s) available in stock.`);
  let user=(await sb.auth.getUser()).data.user;
- if(!user)return alert('Please sign in again.');
- let no='SAL-'+Date.now().toString().slice(-8);
+ if(!user)return alert("Please sign in again.");
+ let no="SAL-"+Date.now().toString().slice(-8);
  let price=Number(p.selling_price||0);
- let saleDate=today();
- let ins=await sb.from('sales').insert({sale_no:no,product_id:p.id,customer_name:null,quantity:qty,unit_price:price,sale_date:saleDate,created_by:user.id});
- if(ins.error)return alert('Sale was not saved: '+ins.error.message);
+ let ins=await sb.from("sales").insert({
+   sale_no:no,product_id:p.id,customer_name:null,quantity:qty,
+   unit_price:price,sale_date:today(),created_by:user.id
+ });
+ if(ins.error)return alert("Sale was not saved: "+ins.error.message);
  await loadProducts();
- let updated=products.find(x=>x.id===id);
- let after=updated?Number(updated.current_stock||0):current-qty;
- if(after!==current-qty)return alert('Sale saved, but stock did not decrease. Please run the Warehouse Pro stock trigger SQL once.');
- if(typeof loadSales==='function')await loadSales();
- if(typeof refreshAnalytics==='function')await refreshAnalytics();
+ let fresh=products.find(x=>x.id===id);
+ let expected=current-qty;
+ if(!fresh || Number(fresh.current_stock)!==expected){
+   return alert(`Sale saved, but stock did not decrease. Expected ${expected}, found ${fresh?fresh.current_stock:"unknown"}.`);
+ }
+ alert(`Sale saved. ${p.product_name} stock is now ${expected}.`);
+ if(typeof loadSales==="function")await loadSales();
 };
 window.quickAdd=async id=>{
- alert("Only Admin can add stock. Staff can reduce stock using −.");
+ let p=products.find(x=>x.id===id); if(!p)return;
+ let qty=Math.floor(Number(prompt(`How many ${p.product_name} received?`, "1")||0));
+ if(qty<1)return;
+ let user=(await sb.auth.getUser()).data.user;
+ if(!user)return alert("Please sign in again.");
+ let no="PUR-"+Date.now().toString().slice(-8);
+ let price=Number(p.purchase_price||0);
+ let ins=await sb.from("purchases").insert({
+   purchase_no:no,product_id:p.id,supplier_name:null,quantity:qty,
+   unit_price:price,purchase_date:today(),created_by:user.id
+ });
+ if(ins.error)return alert("Purchase was not saved: "+ins.error.message);
+ let newStock=Number(p.current_stock||0)+qty;
+ let upd=await sb.from("products").update({current_stock:newStock}).eq("id",p.id);
+ if(upd.error)return alert("Purchase saved, but stock could not be updated: "+upd.error.message);
+ await loadProducts();
+ alert(`Stock added. ${p.product_name} stock is now ${newStock}.`);
+ if(typeof loadPurchases==="function")await loadPurchases();
 };
 $("addProductBtn").onclick=()=>openProduct();$("closeProductBtn").onclick=closeProduct;$("cancelProductBtn").onclick=closeProduct;$("productSearch").oninput=renderProducts;
 $("productForm").onsubmit=async e=>{e.preventDefault();let sku=$("sku").value.trim(),name=$("productName").value.trim();if(!sku||!name)return pfmsg("SKU and Product Name are required.");let payload={sku,product_name:name,category:$("category").value.trim()||null,purchase_price:Number($("purchasePrice").value||0),selling_price:Number($("sellingPrice").value||0),current_stock:Math.max(0,Math.floor(Number($("currentStock").value||0))),reorder_level:Math.max(0,Math.floor(Number($("reorderLevel").value||0)))};if(!editingProductId)payload.created_by=(await sb.auth.getUser()).data.user?.id;pfmsg("Saving...",true);let r=editingProductId?await sb.from("products").update(payload).eq("id",editingProductId):await sb.from("products").insert(payload);if(r.error)return pfmsg(r.error.message);closeProduct();pmsg(editingProductId?"Product updated.":"Product added.",true);loadProducts()}
 function showPage(page){document.querySelectorAll(".content-page").forEach(x=>x.classList.remove("active"));$("page-"+page).classList.add("active");$("pageTitle").textContent=page.charAt(0).toUpperCase()+page.slice(1);if(page==="products")loadProducts();if(page==="purchase"){loadProducts();loadPurchases()}if(page==="sales"){loadProducts();loadSales()}}
-document.querySelectorAll(".side button[data-page], .mobile-nav button[data-page]").forEach(b=>b.onclick=()=>{showPage(b.dataset.page);document.querySelectorAll(".mobile-nav button[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===b.dataset.page))})
-$("mobileLogout").onclick=()=>$("logout").click();
-$("addProductBtn").style.display=currentRole==="admin"?"block":"none";
+document.querySelectorAll(".side button[data-page]").forEach(b=>b.onclick=()=>showPage(b.dataset.page))
 
 let purchases=[];
 function purchaseMsg(t,ok=false){$("purchaseMsg").textContent=t;$("purchaseMsg").style.color=ok?"#16815b":"#b42318"}
@@ -391,8 +456,30 @@ function closeSale(){$("salesModal").style.display="none"}
 $("addSaleBtn").onclick=openSale;$("closeSaleBtn").onclick=closeSale;$("cancelSaleBtn").onclick=closeSale;$("saleQty").oninput=updateSaleTotal;$("saleUnitPrice").oninput=updateSaleTotal;
 $("salesDateFilter").value=new Date().toISOString().slice(0,10);$("salesDateFilter").onchange=()=>{renderDailySales();renderSalesEntries()};
 $("saleProduct").onchange=()=>{let p=products.find(x=>x.id==$("saleProduct").value);if(p)$("saleUnitPrice").value=Number(p.selling_price||0).toFixed(2);updateSaleTotal()}
-$("saleForm").onsubmit=async e=>{e.preventDefault();if(!sb)return saleFormMsg("Supabase is not connected.");let user=(await sb.auth.getUser()).data.user;if(!user)return saleFormMsg("Please sign in again.");let product=products.find(x=>x.id==$("saleProduct").value),qty=Math.floor(Number($("saleQty").value||0)),price=Number($("saleUnitPrice").value||0),no=$("saleNo").value.trim();if(!product||!no||qty<1||price<0)return saleFormMsg("Enter a product, sale number, quantity and valid price.");let current=Number(product.current_stock||0);if(qty>current)return saleFormMsg(`Only ${current} unit(s) available in stock.`);saleFormMsg("Saving sale...",true);let payload={sale_no:no,product_id:product.id,customer_name:$("customerName").value.trim()||null,quantity:qty,unit_price:price,sale_date:$("saleDate").value||today(),created_by:user.id};let ins=await sb.from("sales").insert(payload);if(ins.error)return saleFormMsg(ins.error.message);let newStock=current-qty;let upd=await sb.from("products").update({current_stock:newStock}).eq("id",product.id);if(!upd.error){await sb.from("stock_movements").insert({product_id:product.id,movement_type:"SALE",reference_no:no,quantity:-qty,stock_after:newStock,note:"Sale issued",movement_date:payload.sale_date,created_by:user.id})}if(upd.error){saleFormMsg("Sale saved, but stock could not be updated: "+upd.error.message);await loadSales();return}closeSale();salesMsg(`Sale ${no} saved. ${product.product_name} stock reduced to ${newStock}.`,true);await loadProducts();await loadSales()}
+$("saleForm").onsubmit=async e=>{e.preventDefault();if(!sb)return saleFormMsg("Supabase is not connected.");let user=(await sb.auth.getUser()).data.user;if(!user)return saleFormMsg("Please sign in again.");let product=products.find(x=>x.id==$("saleProduct").value),qty=Math.floor(Number($("saleQty").value||0)),price=Number($("saleUnitPrice").value||0),no=$("saleNo").value.trim();if(!product||!no||qty<1||price<0)return saleFormMsg("Enter a product, sale number, quantity and valid price.");let current=Number(product.current_stock||0);if(qty>current)return saleFormMsg(`Only ${current} unit(s) available in stock.`);saleFormMsg("Saving sale...",true);let payload={sale_no:no,product_id:product.id,customer_name:$("customerName").value.trim()||null,quantity:qty,unit_price:price,sale_date:$("saleDate").value||today(),created_by:user.id};let ins=await sb.from("sales").insert(payload);if(ins.error)return saleFormMsg(ins.error.message);let newStock=current-qty;closeSale();salesMsg(`Sale ${no} saved. ${product.product_name} stock reduced to ${newStock}.`,true);await loadProducts();await loadSales()}
 
+
+function noteMsg(id,t,ok=false){$(id).textContent=t;$(id).style.color=ok?"#16815b":"#b42318"}
+async function loadNotes(type){
+ if(!sb)return;
+ const listId=type==='DAMAGES'?'damagesList':'remarksList';
+ const {data,error}=await sb.from('admin_notes').select('id,note_text,created_at,created_by').eq('section_type',type).order('created_at',{ascending:false});
+ if(error){$(listId).innerHTML=`<div class="empty">Could not load ${type.toLowerCase()}: ${esc(error.message)}</div>`;return}
+ $(listId).innerHTML=(data||[]).map(x=>`<div class="note-item"><div class="note-meta">${new Date(x.created_at).toLocaleString()}</div><div class="note-text">${esc(x.note_text)}</div></div>`).join('')||`<div class="empty">No ${type.toLowerCase()} saved yet.</div>`;
+}
+async function saveNote(type){
+ if(!sb)return;
+ const user=(await sb.auth.getUser()).data.user;if(!user){noteMsg(type==='DAMAGES'?'damageMsg':'remarkMsg','Please sign in again.');return;}
+ const role=String($('role').textContent||'').toLowerCase();if(role && role!=='admin'){noteMsg(type==='DAMAGES'?'damageMsg':'remarkMsg','Only Admin can save this section.');return;}
+ const input=$(type==='DAMAGES'?'damageText':'remarkText');const text=input.value.trim();
+ if(!text){noteMsg(type==='DAMAGES'?'damageMsg':'remarkMsg','Please write something first.');return;}
+ noteMsg(type==='DAMAGES'?'damageMsg':'remarkMsg','Saving...',true);
+ const ins=await sb.from('admin_notes').insert({section_type:type,note_text:text,created_by:user.id});
+ if(ins.error){noteMsg(type==='DAMAGES'?'damageMsg':'remarkMsg',ins.error.message);return;}
+ input.value='';noteMsg(type==='DAMAGES'?'damageMsg':'remarkMsg','Saved successfully.',true);await loadNotes(type);
+}
+$('saveDamageBtn').onclick=()=>saveNote('DAMAGES');
+$('saveRemarkBtn').onclick=()=>saveNote('REMARKS');
 
 async function refreshAnalytics(){
  if(!sb)return;
@@ -415,7 +502,7 @@ async function refreshAnalytics(){
 }
 async function loadMovements(){if(!sb||!$("movementsBody"))return;let {data,error}=await sb.from("stock_movements").select("id,movement_type,reference_no,quantity,stock_after,note,movement_date,products(product_name,sku)").order("created_at",{ascending:false});if(error){$("movementsBody").innerHTML=`<tr><td colspan="7" class="empty">Could not load movements: ${esc(error.message)}</td></tr>`;return}$("movementsBody").innerHTML=(data||[]).map(x=>`<tr><td>${esc(x.movement_date||"")}</td><td>${esc(x.movement_type)}</td><td>${esc(x.reference_no||"—")}</td><td>${esc(x.products?.product_name||"—")}</td><td>${Number(x.quantity||0)}</td><td>${Number(x.stock_after||0)}</td><td>${esc(x.note||"—")}</td></tr>`).join("")||'<tr><td colspan="7" class="empty">No stock movements yet.</td></tr>'}
 const oldShowPage=showPage;
-showPage=async function(page){oldShowPage(page);if(page==="stock")await loadMovements();if(page==="reports"||page==="alerts")await refreshAnalytics();if(page==="settings"){let u=(await sb.auth.getUser()).data.user;if(u){$("settingsEmail").value=u.email||"";$("settingsRole").value=$("role").textContent||""}}};
+showPage=async function(page){oldShowPage(page);if(page==="stock")await loadMovements();if(page==="reports"||page==="alerts")await refreshAnalytics();if(page==="damages")await loadNotes("DAMAGES");if(page==="remarks")await loadNotes("REMARKS");if(page==="settings"){let u=(await sb.auth.getUser()).data.user;if(u){$("settingsEmail").value=u.email||"";$("settingsRole").value=$("role").textContent||""}}};
 const oldLoadProducts=loadProducts;
 loadProducts=async function(){await oldLoadProducts();await refreshAnalytics()};
 const oldLoadPurchases=loadPurchases;
@@ -423,33 +510,10 @@ loadPurchases=async function(){await oldLoadPurchases();await refreshAnalytics()
 const oldLoadSales=loadSales;
 loadSales=async function(){await oldLoadSales();await refreshAnalytics()};
 
+document.querySelectorAll(".mobile-nav button[data-page]").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+$("mobileLogout").onclick=()=>$("logout").click();
+
 boot();
 </script>
 </body>
-<style>
-@media(max-width:700px){body{padding-bottom:0}.mobile-nav{display:flex!important;visibility:visible!important;opacity:1!important}.mobile-nav button{display:flex!important;flex-direction:column;align-items:center;justify-content:center}}
-</style>
 </html>
-<style>
-  /* Staff app: receiving/add-stock controls are intentionally hidden. */
-  .staff-only-hide { display:none !important; }
-</style>
-<script>
-  // Defense-in-depth for the staff UI.
-  document.addEventListener('DOMContentLoaded', function(){
-    const add = document.getElementById('addProductBtn');
-    if(add) add.style.display='none';
-  });
-</script>
-
-<script>
-  // Staff permission: product master cannot be edited or deleted.
-  window.editProduct = function(){ alert("Only Admin can edit products."); };
-  window.deleteProduct = function(){ alert("Only Admin can delete products."); };
-</script>
-<style>
-  /* Staff: hide product-management action controls. */
-  .staff-product-actions,
-  button[onclick*="editProduct"],
-  button[onclick*="deleteProduct"] { display:none !important; }
-</style>
